@@ -6,10 +6,13 @@
           <title>Calculator</title>
      </head>
      <body>
-       <div class="main-container">
 
+      <div class="main-container switch">Theme chenge</div>
+
+       <div class="main-container">
              <div id="output" class ="container ">Input will go here</div>
 
+             <br></br>
              <br></br>
 
              <table class="center">
@@ -17,7 +20,7 @@
                   <th id="button7" onclick="numberButtonPressed()"><button>7</button></th>
                   <th id="button8"><button>8</button></th>
                   <th><button>9</button></th>
-                  <th><button>DEL</button></th>
+                  <th><button class="resetOrDelete">DEL</button></th>
                 </tr>
                 <tr>
                     <th><button>4</button></th>
@@ -33,11 +36,17 @@
                     <th><button>-</button></th>
                   </tr>
 
-                  <tr >
-                    <th><button>RESET</button></th>
-                    <th><button>=</button></th>
+                  <tr>
+                    <th><button>.</button></th>
+                    <th><button>0</button></th>
+                    <th><button>/</button></th>
+                    <th><button>+</button></th>
                   </tr>
-  
+
+
               </table>
+
+                <th><button class="bottonCalcButton resetOrDelete">RESET</button></th>
+                <th><button class="bottonCalcButton equalButton">=</button></th>
      </body>
 </html>
