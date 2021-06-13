@@ -1,46 +1,45 @@
 window.onclick = e => {
     let idOfPressedBtn = e.target.id;
-    let totalSum = 0;
 
     switch (idOfPressedBtn) {
-        case "button1":    
-            console.log("Update UI");
+        case "button1":
+            handleDigitClick(1);
             break;
 
         case "button2":
-            console.log(idOfPressedBtn);
+            handleDigitClick(2);
             break;
 
         case "button3":
-            console.log(idOfPressedBtn);
+            handleDigitClick(3);
             break;
 
         case "button4":
-            console.log(idOfPressedBtn);
+            handleDigitClick(4);
             break;
 
         case "button5":
-            console.log(idOfPressedBtn);
+            handleDigitClick(5);
             break;
 
         case "button6":
-            console.log(idOfPressedBtn);
+            handleDigitClick(6);
             break;
 
         case "button7":
-            console.log(idOfPressedBtn);
+            handleDigitClick(7);
             break;
 
         case "button8":
-            console.log(idOfPressedBtn);
+            handleDigitClick(8);
             break;
 
         case "button9":
-            console.log(idOfPressedBtn);
+            handleDigitClick(9);
             break;
 
         case "button0":
-            console.log(idOfPressedBtn);
+            handleDigitClick(0);
             break;
 
         case "deleteButton":
@@ -48,7 +47,6 @@ window.onclick = e => {
             break;
 
         case "plusButton":
-            console.log(idOfPressedBtn);
             break;
 
         case "substructBUtton":
@@ -61,17 +59,15 @@ window.onclick = e => {
 
         case "divideButton":
             data["lastOperation"] = operationsEnum.DIVIDE;
-            console.log(idOfPressedBtn);
             break;
 
         case "multipleBUtton":
             data["lastOperation"] = operationsEnum.MULTYPLE;
-            console.log(idOfPressedBtn);
             break;
 
         case "equalButton":
             data["lastOperation"] = operationsEnum.EQUAL;
-            changeOutputText("" + data["number"])
+            changeOutputText("" + data["firstNumber"])
             break;
 
         case "resetButton":
@@ -86,15 +82,10 @@ window.onclick = e => {
 
 
 
-var data = {
-    number: 0,
-    lastOperation: operationsEnum.EQUAL,
-    isFirstMove: true
-}
 
 
 function changeOutputText(newOutputText) {
-    document.getElementById("output").innerHTML = "" + newOutputText;
+    document.getElementById("resultScreenId").innerHTML = newOutputText.toString();
 }
 
 function resetNUmberInCals() {
@@ -103,37 +94,101 @@ function resetNUmberInCals() {
 }
 
 function deleteLastDigit() {
-    let outputAsString = data["number"].toString();
+    let outputAsString = data["firstNumber"].toString();
     let numPostDeletion = outputAsString.substr(0, outputAsString.length - 1);
-    if (numPostDeletion === ""){
+    if (numPostDeletion === "") {
         numPostDeletion = 0;
         data["isFirstMove"] = true
     }
 
-    data["number"] = parseFloat(numPostDeletion);
-    changeOutputText(data["number"]);
+    data["firstNumber"] = parseFloat(numPostDeletion);
+    changeOutputText(data["firstNumber"]);
+}
+
+
+function handleDigitClick(pressedNumber) {
+
+    
+    if (data["operator"] === null) {
+        data["firstNumber"] *= 10;
+        data["firstNumber"] += pressedNumber;
+    } else {
+        data["secondNumber"] *= 10;
+        data["secondNumber"] += pressedNumber;
+    }
+    changeOutputText(data["firstNumber"]);
+}
+
+function handleOperatorsClick(operator) {
+    let firstNumber = data["firstNumber"];
+    let secondNumber = data["secondNumber"];
+    let result, outputText;
+
+    switch (operator) {
+        case operationsEnum.DIVIDE:
+            outputText = operator;
+            if (secondNumber === 0) {
+                outputText = "Cant divide by zero";
+                data["operator"] = null;
+                changeOutputText(outputText);
+                return;
+            } else {
+                result = firstNumber / secondNumber;
+            }
+            break;
+
+        case operationsEnum.MULTIPLY:
+            outputText = operator;
+            result = firstNumber * secondNumber;
+            break;
+
+        case operationsEnum.SUBTRACT:
+            outputText = operator;
+            result = firstNumber - secondNumber;
+            break;
+
+        case operationsEnum.ADDITION:
+            outputText = operator;
+            result = firstNumber + secondNumber;
+            break;
+
+        case operationsEnum.EQUAL:
+            changeOutputText(data["firstNumber"]);
+            break;
+    }
+
+    data["firstNumber"] = result;
+    data["secondNumber"] = 0;
+
+    changeOutputText(outputText);
+
+}
+
+function handleDecimalClick() {
+    if (data["operator"] === null && data["firstNumber"] % 1 != 0) {
+        data["firstNumber"] = data["firstNumber"].toFixed(1);
+
+    }else if(data["secondNumber"] % 1 != 0){
+        data["secondNumber"] = data["secondNumber"].toFixed(1);
+
+    } 
+}
+
+var data = {
+    firstNumber: 0,
+    secondNumber: 0,
+    operator: null,
 }
 
 operationsEnum = {
-    DIVIDE: "/",
-    MULTYPLE: "*",
-    SUBSTRUCT: "-",
+    DIVIDE: '/',
+    ADDITION: '+',
+    MULTIPLY: "*",
+    SUBTRACT: "-",
     EQUAL: "=",
-    DECIMAL: "."
 }
 
-digitsEnum = {
-    ZERO: 0,
-    ONE: 1,
-    TWO: 1,
-    THREE: 1,
-    FOUR: 1,
-    FIVE: 1,
-    SIX: 1,
-    SEVEN: 1,
-    EIGHT: 1,
-    NINE: 9
-}
+
 
 
 
