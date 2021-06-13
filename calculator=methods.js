@@ -90,13 +90,13 @@ function changeOutputText(newOutputText) {
 
 function deleteLastDigit() {
     let numPostDeletion = (data["operator"] === null)
-    ? removeLastDigitFromStringInData("firstNumber")
-    : removeLastDigitFromStringInData("secondNumber")
-       
+        ? removeLastDigitFromStringInData("firstNumber")
+        : removeLastDigitFromStringInData("secondNumber")
+
     changeOutputText(numPostDeletion);
 }
 
-function removeLastDigitFromStringInData(stringInData){
+function removeLastDigitFromStringInData(stringInData) {
     numPostDeletion = data[stringInData].substr(0, data[stringInData].length - 1);
     if (numPostDeletion === "") {
         numPostDeletion = "0";
@@ -109,10 +109,18 @@ function removeLastDigitFromStringInData(stringInData){
 function handleDigitClick(pressedNumber) {
 
     if (data["operator"] === null) {
-        data["firstNumber"] += pressedNumber;
+        if(data["firstNumber"] === "0"){
+            data["firstNumber"] = pressedNumber;
+        }else{
+            data["firstNumber"] += pressedNumber;
+        }
         changeOutputText(data["firstNumber"]);
     } else {
-        data["secondNumber"] += pressedNumber;
+        if(data["secondNumber"] === "0"){
+            data["secondNumber"] = pressedNumber;
+        }else{
+            data["secondNumber"] += pressedNumber;
+        }
         changeOutputText(data["secondNumber"]);
     }
 }
@@ -120,46 +128,65 @@ function handleDigitClick(pressedNumber) {
 function handleOperatorsClick(operator) {
     let firstNumber = data["firstNumber"];
     let secondNumber = data["secondNumber"];
-    let result, outputText;
+    let result;
+    let lastOperator = data["operator"];
+    data["operator"] = operator;
 
     switch (operator) {
         case operationsEnum.DIVIDE:
-            outputText = operator;
-            if (secondNumber === "0") {
-                outputText = "Cant divide by zero";
+            if (secondNumber === "0" && lastOperator != null) {
+                data["firstNumber"] = "0"
+                data["secondNumber"] = "0"
                 data["operator"] = null;
-                changeOutputText(outputText);
+                changeOutputText("Cant divide by zero");
                 return;
+
+            } else if (secondNumber === "0") {
+                result = firstNumber.toString();
             } else {
                 result = (parseFloat(firstNumber) / parseFloat(secondNumber)).toString();
             }
+            data["operator"] = operator;
             break;
 
         case operationsEnum.MULTIPLY:
-            outputText = operator;
-            result = (parseFloat(firstNumber) * parseFloat(secondNumber)).toString();
+            if (secondNumber === "0" && lastOperator === null) {
+                result = firstNumber.toString();
+            }
+            else {
+                result = (parseFloat(firstNumber) * parseFloat(secondNumber)).toString();
+            }
+
+            data["operator"] = operator;
             break;
 
         case operationsEnum.SUBTRACT:
-            outputText = operator;
+            data["operator"] = operator;
             result = (parseFloat(firstNumber) - parseFloat(secondNumber)).toString();
             break;
 
         case operationsEnum.ADDITION:
-            outputText = operator;
+            data["operator"] = operator;
             result = (parseFloat(firstNumber) + parseFloat(secondNumber)).toString();
             break;
 
         case operationsEnum.EQUAL:
-            //TODO: add something here
-            changeOutputText(outputText);
+            result = handleOperatorsClick(lastOperator);
+            data["operator"] = null;
             break;
     }
 
-    data["firstNumber"] = result;
-    data["secondNumber"] = "0";
+    if (lastOperator != null) {
+        data["firstNumber"] = result;
+        if (operator === operationsEnum.EQUAL) {
+            data["secondNumber"] = "0";
+        } else {
+        }
+    }
 
-    changeOutputText(outputText);
+    changeOutputText(result);
+
+    return result;
 
 }
 
