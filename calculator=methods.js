@@ -3,43 +3,43 @@ window.onclick = e => {
 
     switch (idOfPressedBtn) {
         case "button1":
-            handleDigitClick(1);
+            handleDigitClick("1");
             break;
 
         case "button2":
-            handleDigitClick(2);
+            handleDigitClick("2");
             break;
 
         case "button3":
-            handleDigitClick(3);
+            handleDigitClick("3");
             break;
 
         case "button4":
-            handleDigitClick(4);
+            handleDigitClick("4");
             break;
 
         case "button5":
-            handleDigitClick(5);
+            handleDigitClick("5");
             break;
 
         case "button6":
-            handleDigitClick(6);
+            handleDigitClick("6");
             break;
 
         case "button7":
-            handleDigitClick(7);
+            handleDigitClick("7");
             break;
 
         case "button8":
-            handleDigitClick(8);
+            handleDigitClick("8");
             break;
 
         case "button9":
-            handleDigitClick(9);
+            handleDigitClick("9");
             break;
 
         case "button0":
-            handleDigitClick(0);
+            handleDigitClick("0");
             break;
 
         case "deleteButton":
@@ -47,31 +47,33 @@ window.onclick = e => {
             break;
 
         case "plusButton":
+            handleOperatorsClick(operationsEnum.ADDITION);
             break;
 
         case "substructBUtton":
-            data["lastOperation"] = operationsEnum.SUBSTRUCT;
+            handleOperatorsClick(operationsEnum.SUBTRACT);
             break;
 
         case "decimalDot":
-            data["lastOperation"] = operationsEnum.DECIMAL;
+            //handleOperatorsClick(operationsEnum.ADDITION);
             break;
 
         case "divideButton":
-            data["lastOperation"] = operationsEnum.DIVIDE;
+            handleOperatorsClick(operationsEnum.DIVIDE);
             break;
 
         case "multipleBUtton":
-            data["lastOperation"] = operationsEnum.MULTYPLE;
+            handleOperatorsClick(operationsEnum.MULTIPLY);
             break;
 
         case "equalButton":
-            data["lastOperation"] = operationsEnum.EQUAL;
-            changeOutputText("" + data["firstNumber"])
+            handleOperatorsClick(operationsEnum.EQUAL);
             break;
 
         case "resetButton":
-            //resetNUmberInCals();
+            data["firstNumber"] = 0;
+            data["secondNumber"] = 0;
+            data["operator"] = null;
             changeOutputText("0")
             break;
 
@@ -81,42 +83,38 @@ window.onclick = e => {
 }
 
 
-
-
-
 function changeOutputText(newOutputText) {
     document.getElementById("resultScreenId").innerHTML = newOutputText.toString();
 }
 
-function resetNUmberInCals() {
-    number = 0;
-
-}
 
 function deleteLastDigit() {
-    let outputAsString = data["firstNumber"].toString();
-    let numPostDeletion = outputAsString.substr(0, outputAsString.length - 1);
-    if (numPostDeletion === "") {
-        numPostDeletion = 0;
-        data["isFirstMove"] = true
-    }
-
-    data["firstNumber"] = parseFloat(numPostDeletion);
-    changeOutputText(data["firstNumber"]);
+    let numPostDeletion = (data["operator"] === null)
+    ? removeLastDigitFromStringInData("firstNumber")
+    : removeLastDigitFromStringInData("secondNumber")
+       
+    changeOutputText(numPostDeletion);
 }
 
+function removeLastDigitFromStringInData(stringInData){
+    numPostDeletion = data[stringInData].substr(0, data[stringInData].length - 1);
+    if (numPostDeletion === "") {
+        numPostDeletion = "0";
+    }
+
+    data[stringInData] = numPostDeletion;
+    return numPostDeletion;
+}
 
 function handleDigitClick(pressedNumber) {
 
-    
     if (data["operator"] === null) {
-        data["firstNumber"] *= 10;
         data["firstNumber"] += pressedNumber;
+        changeOutputText(data["firstNumber"]);
     } else {
-        data["secondNumber"] *= 10;
         data["secondNumber"] += pressedNumber;
+        changeOutputText(data["secondNumber"]);
     }
-    changeOutputText(data["firstNumber"]);
 }
 
 function handleOperatorsClick(operator) {
@@ -127,38 +125,39 @@ function handleOperatorsClick(operator) {
     switch (operator) {
         case operationsEnum.DIVIDE:
             outputText = operator;
-            if (secondNumber === 0) {
+            if (secondNumber === "0") {
                 outputText = "Cant divide by zero";
                 data["operator"] = null;
                 changeOutputText(outputText);
                 return;
             } else {
-                result = firstNumber / secondNumber;
+                result = (parseFloat(firstNumber) / parseFloat(secondNumber)).toString();
             }
             break;
 
         case operationsEnum.MULTIPLY:
             outputText = operator;
-            result = firstNumber * secondNumber;
+            result = (parseFloat(firstNumber) * parseFloat(secondNumber)).toString();
             break;
 
         case operationsEnum.SUBTRACT:
             outputText = operator;
-            result = firstNumber - secondNumber;
+            result = (parseFloat(firstNumber) - parseFloat(secondNumber)).toString();
             break;
 
         case operationsEnum.ADDITION:
             outputText = operator;
-            result = firstNumber + secondNumber;
+            result = (parseFloat(firstNumber) + parseFloat(secondNumber)).toString();
             break;
 
         case operationsEnum.EQUAL:
-            changeOutputText(data["firstNumber"]);
+            //TODO: add something here
+            changeOutputText(outputText);
             break;
     }
 
     data["firstNumber"] = result;
-    data["secondNumber"] = 0;
+    data["secondNumber"] = "0";
 
     changeOutputText(outputText);
 
@@ -168,15 +167,15 @@ function handleDecimalClick() {
     if (data["operator"] === null && data["firstNumber"] % 1 != 0) {
         data["firstNumber"] = data["firstNumber"].toFixed(1);
 
-    }else if(data["secondNumber"] % 1 != 0){
+    } else if (data["secondNumber"] % 1 != 0) {
         data["secondNumber"] = data["secondNumber"].toFixed(1);
 
-    } 
+    }
 }
 
 var data = {
-    firstNumber: 0,
-    secondNumber: 0,
+    firstNumber: "0",
+    secondNumber: "0",
     operator: null,
 }
 
