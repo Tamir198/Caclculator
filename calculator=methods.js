@@ -55,7 +55,7 @@ window.onclick = e => {
             break;
 
         case "decimalDot":
-            //handleOperatorsClick(operationsEnum.ADDITION);
+            handleDecimalClick();
             break;
 
         case "divideButton":
@@ -191,13 +191,15 @@ function handleOperatorsClick(operator) {
 }
 
 function handleDecimalClick() {
-    if (data["operator"] === null && data["firstNumber"] % 1 != 0) {
-        data["firstNumber"] = data["firstNumber"].toFixed(1);
-
-    } else if (data["secondNumber"] % 1 != 0) {
-        data["secondNumber"] = data["secondNumber"].toFixed(1);
-
+    if (data["operator"] === null && !data["firstNumber"].includes(".")) {
+        data["firstNumber"] += ".";
+        changeOutputText(data["firstNumber"]);
+        
+    } else if (!data["secondNumber"].includes(".")) {
+        data["secondNumber"] += ".";
+        changeOutputText(data["secondNumber"]);
     }
+
 }
 
 var data = {
