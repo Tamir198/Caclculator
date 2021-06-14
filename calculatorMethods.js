@@ -204,6 +204,7 @@ function handleOperatorsClick(operator) {
 
     changeOutputText(result);
     return result;
+
 }
 
 function handleDecimalClick() {
