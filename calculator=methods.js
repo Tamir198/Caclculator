@@ -12,7 +12,6 @@ operationsEnum = {
     EQUAL: "=",
 }
 
-
 window.onclick = e => {
     let idOfPressedBtn = e.target.id;
 
@@ -93,7 +92,6 @@ window.onclick = e => {
             console.log('Button not found ' + idOfPressedBtn);
     }
 }
-
 
 function resetBUttonPressed(){
     data["firstNumber"] = 0;
@@ -205,9 +203,7 @@ function handleOperatorsClick(operator) {
     }
 
     changeOutputText(result);
-
     return result;
-
 }
 
 function handleDecimalClick() {
