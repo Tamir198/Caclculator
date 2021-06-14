@@ -1,3 +1,18 @@
+var data = {
+    firstNumber: "0",
+    secondNumber: "0",
+    operator: null,
+}
+
+operationsEnum = {
+    DIVIDE: '/',
+    ADDITION: '+',
+    MULTIPLY: "*",
+    SUBTRACT: "-",
+    EQUAL: "=",
+}
+
+
 window.onclick = e => {
     let idOfPressedBtn = e.target.id;
 
@@ -71,15 +86,20 @@ window.onclick = e => {
             break;
 
         case "resetButton":
-            data["firstNumber"] = 0;
-            data["secondNumber"] = 0;
-            data["operator"] = null;
-            changeOutputText("0")
+            resetBUttonPressed();
             break;
 
         default:
             console.log('Button not found ' + idOfPressedBtn);
     }
+}
+
+
+function resetBUttonPressed(){
+    data["firstNumber"] = 0;
+    data["secondNumber"] = 0;
+    data["operator"] = null;
+    changeOutputText("0")
 }
 
 
@@ -109,20 +129,21 @@ function removeLastDigitFromStringInData(stringInData) {
 function handleDigitClick(pressedNumber) {
 
     if (data["operator"] === null) {
-        if(data["firstNumber"] === "0"){
-            data["firstNumber"] = pressedNumber;
-        }else{
-            data["firstNumber"] += pressedNumber;
-        }
-        changeOutputText(data["firstNumber"]);
+        changeNumbersInData("firstNumber",pressedNumber);
+       // changeOutputText(data["firstNumber"]);
     } else {
-        if(data["secondNumber"] === "0"){
-            data["secondNumber"] = pressedNumber;
-        }else{
-            data["secondNumber"] += pressedNumber;
-        }
-        changeOutputText(data["secondNumber"]);
+        changeNumbersInData("secondNumber",pressedNumber);
+        //changeOutputText(data["secondNumber"]);
     }
+}
+
+function changeNumbersInData(string, num){
+    if(data[string] === "0"){
+        data[string] = num;
+    }else{
+        data[string] += num;
+    }
+    changeOutputText(data[string].toString());
 }
 
 function handleOperatorsClick(operator) {
@@ -180,7 +201,6 @@ function handleOperatorsClick(operator) {
         data["firstNumber"] = result;
         if (operator === operationsEnum.EQUAL) {
             data["secondNumber"] = "0";
-        } else {
         }
     }
 
@@ -199,21 +219,6 @@ function handleDecimalClick() {
         data["secondNumber"] += ".";
         changeOutputText(data["secondNumber"]);
     }
-
-}
-
-var data = {
-    firstNumber: "0",
-    secondNumber: "0",
-    operator: null,
-}
-
-operationsEnum = {
-    DIVIDE: '/',
-    ADDITION: '+',
-    MULTIPLY: "*",
-    SUBTRACT: "-",
-    EQUAL: "=",
 }
 
 
